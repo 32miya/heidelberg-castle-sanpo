@@ -1432,7 +1432,7 @@ function drawMini(){ const lv=mapLvOf(); const key=lv+ERA; const L=LVCAN[key]||(
 { const TL=new THREE.TextureLoader(); const AN=Math.min(8,maxAniso);
   const use=(file,fn)=>TL.load('img/'+file,t=>{ t.encoding=THREE.sRGBEncoding; t.wrapS=t.wrapT=THREE.RepeatWrapping; t.anisotropy=AN; fn(t); needRefl=2; },undefined,()=>{});
   const setMap=(m,t,emis)=>{ m.map=t; if(emis) m.emissiveMap=t; m.needsUpdate=true; };
-  use('sandstone.webp',t=>{ t.repeat.set(.8,.8); setMap(M.sand,t,true); setMap(M.sandN,t,true); M.sandN.color.set('#ffe8e0'); }); use('sandstone_ruin.webp',t=>{ setMap(M.sandD,t,true); setMap(M.sandB,t,true); });
+  use('sandstone.webp',t=>{ t.repeat.set(.55,.55); setMap(M.sand,t,true); setMap(M.sandN,t,true); M.sandN.color.set('#ffe8e0'); }); use('sandstone_ruin.webp',t=>{ t.repeat.set(.55,.55); setMap(M.sandD,t,true); setMap(M.sandB,t,true); });
   use('barrel_end.webp',t=>{ t.wrapS=t.wrapT=THREE.ClampToEdgeWrapping; setMap(M.barrelEnd,t); }); use('barrel_staves.webp',t=>setMap(M.staves,t)); use('chapel_altar.webp',t=>setMap(M.altar,t,true)); use('apothecary_shelf.webp',t=>setMap(M.shelf,t));
   use('parterre.webp',t=>setMap(M.parterre,t)); use('town_house.webp',t=>{ M.towns.forEach((m,i)=>{ setMap(m,t); m.color.set(['#ffffff','#ffe8e0','#f4f4ff','#f0fff0','#fff4d8','#f4ecff'][i]); }); }); use('statue.webp',t=>{ setMap(M.statue,t,true); });
 }
