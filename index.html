@@ -1526,6 +1526,8 @@ function stampShot(src){ const img=new Image(); img.onload=()=>{ const c=makeCan
 /* ============================================================
    メインループ
    ============================================================ */
+/* 世界さんぽディフェンス（?td のときだけ。defence-castle/world/ のゲームが画面とカメラを受け持つ） */
+const TD=/[?&]td\b/.test(location.search);
 let START=true, last=performance.now(), T0=performance.now(), stepAcc=0, bellT=20, birdT=6, dripT=2;
 const tmpV=new THREE.Vector3(), _q=new THREE.Quaternion(), _m=new THREE.Matrix4(), _s=new THREE.Vector3();
 let firstYard=false, firstFass=false, firstAltan=false, firstBridge=false, firstPhilo=false, firstOtto=false;
@@ -1597,7 +1599,7 @@ function step(dt,t){
 let envK=0, miniT=0;
 const RIDEMARK=[]; for(const s of STOPS){ const m=new THREE.Mesh(new THREE.RingGeometry(.6,.9,24),new THREE.MeshBasicMaterial({color:'#ffd070',transparent:true,opacity:.6,depthWrite:false,side:THREE.DoubleSide})); m.rotation.x=-PI/2; m.position.set(s.x,s.y+.06,s.z); eg('n').add(m); RIDEMARK.push(m); }
 function loop(now){ requestAnimationFrame(loop); const dt=Math.min(.1,(now-last)/1000); last=now; const t=(now-T0)/1000;
-  if(!START) step(dt,t); else { const a=t*.03; { const cx=-230+Math.sin(a)*30, cz=-482+Math.cos(a)*3; camera.position.set(cx,groundY(cx,cz)+3+Math.sin(a*.7),cz); } camera.lookAt(-10,-12,0); const d=window.SUND; sun.position.set(d.x*500,d.y*500,d.z*500); sun.target.position.set(0,0,0); sun.target.updateMatrixWorld(); renderer.shadowMap.needsUpdate=true; animWorld(dt,t); }
+  if(TD&&window.SekaiTD&&SekaiTD.ready){ SekaiTD.frame(dt,t); animWorld(dt,t); } else if(!START) step(dt,t); else { const a=t*.03; { const cx=-230+Math.sin(a)*30, cz=-482+Math.cos(a)*3; camera.position.set(cx,groundY(cx,cz)+3+Math.sin(a*.7),cz); } camera.lookAt(-10,-12,0); const d=window.SUND; sun.position.set(d.x*500,d.y*500,d.z*500); sun.target.position.set(0,0,0); sun.target.updateMatrixWorld(); renderer.shadowMap.needsUpdate=true; animWorld(dt,t); }
   RIDEMARK.forEach(m=>{ m.material.opacity=.4+.25*Math.sin(t*3); m.visible=!LIFTA; });
   if(window.DEBUGCAM){ camera.position.set(...DEBUGCAM.p); camera.lookAt(...DEBUGCAM.l); }
   if(needRefl>0){ needRefl--; if(needRefl===0) updateRefl(); }
@@ -1681,6 +1683,18 @@ $('goBtn').disabled=false; $('goBtn').textContent='コルンマルクトから�
 $('goBtn').onclick=()=>{ START=false; $('start').hidden=true; SND.init(); SND.setOn(SOUND); warpTo(START_POS.x,groundY(START_POS.x,START_POS.z),START_POS.z,START_POS.yaw); P.pitch=.34; say('','見上げると山腹に赤い城。左の坂道を歩いて上るか、広場の南の駅から山岳鉄道で上れます。古い橋と哲学者の道は北（後ろ）です。',9); setTimeout(()=>SND.bell(.4),800); };
 </script>
 
+<script>
+/* 世界さんぽディフェンスの入口（?td のときだけ。地形・高さ・時代の切り替えをゲームに渡して、defence-castle/world/ を読む） */
+if(TD){
+  $('start').hidden=true; setEra('g');
+  window.__sekai={THREE,scene,camera,renderer,sun,hemi,setEra,setQual,
+    groundY,surfaceAt,blocked,
+    hy:(x,z,y)=>{ const g=groundY(x,z); const s=surfaceAt(x,z,y==null?g+12:y); return s>-1e8?Math.max(g,s):g; },
+    keep:[sky].concat(LAKES,TERR), hide:[window.PIM].filter(Boolean).concat(RIDEMARK)};
+  window.TD_MAP='heidelberg'; window.TD_GAME_URL='/defence-castle/world/';
+  for(const src of ['/defence-castle/world/stages.js','/defence-castle/world/maps/heidelberg.js','/defence-castle/world/td.js']){ const sc=document.createElement('script'); sc.src=src; sc.async=false; document.body.appendChild(sc); }
+}
+</script>
 <!-- sekai-portal:begin（世界さんぽ入口へ戻るボタン・各名所共通。このブロックごと </body> の直前に貼る） -->
 <style>
 .sekai-back{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;margin-top:2px;padding:9px 14px;border:1px solid rgba(201,163,92,.45);border-radius:10px;

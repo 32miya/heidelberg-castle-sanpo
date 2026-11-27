@@ -34,3 +34,6 @@
 | parterre.webp | 1618年の刺繍花壇（真上から見た図） |
 | town_house.webp | 旧市街の家の正面（窓3×3） |
 | statue.webp | 像の石の質感 |
+
+## 世界さんぽディフェンス（`?td`）
+`?td` を付けて開くと、このマップが「世界さんぽディフェンス」（タワー配置型の防衛ゲーム、[defence-castle/world](https://32miya.github.io/defence-castle/world/)）の第1ステージになります。1618年の城が舞台。ゲーム本体は defence-castle リポジトリの `world/` にあり、このページは入口の数行（`TD`）だけを持ちます。
