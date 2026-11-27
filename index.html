@@ -594,8 +594,9 @@ function paintTerrain(){ const P=TPAL[SEASON]; for(const m of TERR){ const p=m.g
     m.geometry.attributes.color.needsUpdate=true; } }
 const NEAR={x0:-700,x1:400,z0:-620,z1:280};
 terrMesh(-200,280,-160,140,3); terrMesh(-700,-200,-160,140,6); terrMesh(-700,280,-300,-160,5); terrMesh(-700,280,-620,-300,5); terrMesh(280,400,-620,280,8); terrMesh(-700,280,140,280,8);
-terrMesh(-2400,2400,-2400,2200,24,(x,z)=>inR(NEAR,x,z,-4)?-3:0);
-terrMesh(-9000,9000,-9000,9000,160,(x,z)=>(x>-2400&&x<2400&&z>-2400&&z<2200)?-8:0,(x,z)=>groundRaw(x,z));
+/* 遠くの粗い地面は、細かい地面の下に深く沈める（上から見たとき、粗い三角形が町の家を埋めて見えないように） */
+terrMesh(-2400,2400,-2400,2200,24,(x,z)=>inR(NEAR,x,z,-30)?-90:inR(NEAR,x,z,-4)?-3:0);
+terrMesh(-9000,9000,-9000,9000,160,(x,z)=>(x>-2200&&x<2200&&z>-2200&&z<2000)?-260:(x>-2400&&x<2400&&z>-2400&&z<2200)?-8:0,(x,z)=>groundRaw(x,z));
 paintTerrain();
 // ネッカー川（水面は一度だけ周りを映し込む）
 const cubeRT=new THREE.WebGLCubeRenderTarget(256,{generateMipmaps:true,minFilter:THREE.LinearMipmapLinearFilter}); cubeRT.texture.encoding=THREE.sRGBEncoding;
