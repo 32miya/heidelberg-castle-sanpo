@@ -1688,7 +1688,7 @@ $('goBtn').onclick=()=>{ START=false; $('start').hidden=true; SND.init(); SND.se
 /* 世界さんぽディフェンスの入口（?td のときだけ。地形・高さ・時代の切り替えをゲームに渡して、defence-castle/world/ を読む） */
 if(TD){
   $('start').hidden=true; setEra('g');
-  window.__sekai={THREE,scene,camera,renderer,sun,hemi,setEra,setQual,
+  window.__sekai={THREE,scene,camera,renderer,hemi,sun,setEra,setQual,
     groundY,surfaceAt,blocked,
     hy:(x,z,y)=>{ const g=groundY(x,z); const s=surfaceAt(x,z,y==null?g+12:y); return s>-1e8?Math.max(g,s):g; },
     keep:[sky].concat(LAKES,TERR), hide:[window.PIM].filter(Boolean).concat(RIDEMARK)};
